@@ -1,0 +1,91 @@
+{
+  "scenarioId": "sample-test-001",
+  "scenarioName": "Sample Login Test Scenario",
+  "baseUrl": "https://www.saucedemo.com",
+  "browserType": "chromium",
+  "testCases": [
+    {
+      "id": "tc-001",
+      "name": "Navigate to Homepage",
+      "description": "Verify that the homepage loads successfully",
+      "priority": "high",
+      "tags": [
+        "smoke",
+        "critical-path"
+      ],
+      "steps": [
+        {
+          "id": "step-001",
+          "action": "navigate",
+          "value": "/",
+          "description": "Navigate to login page",
+          "timeout": 30000
+        },
+        {
+          "id": "step-002",
+          "action": "assert",
+          "description": "Verify page title",
+          "assertions": [
+            {
+              "type": "visible",
+              "target": "body",
+              "expected": "true",
+              "description": "Page body should be visible"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tc-002",
+      "name": "execute login",
+      "description": "execute login with valid credentials",
+      "priority": "medium",
+      "tags": [
+        "ui",
+        "validation"
+      ],
+      "steps": [
+        {
+          "id": "step-001",
+          "action": "type",
+          "target": "input[id='user-name']",
+          "value": "standard_user",
+          "description": "Enter username"
+        },
+        {
+          "id": "step-002",
+          "action": "type",
+          "target": "input[id='password']",
+          "value": "secret_sauce",
+          "description": "Enter password"
+        },
+        {
+          "id": "step-003",
+          "action": "click",
+          "target": "#login-button",
+          "description": "Click login button"
+        },
+        {
+          "id": "step-004",
+          "action": "assert",
+          "description": "Verify home page is loaded",
+          "assertions": [
+            {
+              "type": "url",
+              "target": "body",
+              "expected": "/inventory.html",
+              "description": "URL should navigate to inventory page"
+            },
+            {
+              "type": "text",
+              "target": "div.app_logo",
+              "expected": "Swag Labs",
+              "description": "Swag Labs logo should be visible"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

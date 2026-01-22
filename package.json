@@ -1,0 +1,38 @@
+{
+  "name": "playwright-mcp-1",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server/index.js",
+    "dev": "ts-node src/server/index.ts",
+    "test": "ts-node src/examples/run-scenario.ts",
+    "test:headed": "HEADLESS=false ts-node src/examples/run-scenario.ts",
+    "clean": "rm -rf dist",
+    "setup": "npm install && npx playwright install",
+    "validate": "ts-node src/examples/validate-scenario.ts"
+  },
+  "keywords": [
+    "mcp",
+    "playwright",
+    "automation",
+    "testing",
+    "e2e"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "dotenv": "^17.2.3",
+    "playwright": "^1.57.0",
+    "uuid": "^13.0.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "@types/uuid": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
