@@ -1,79 +1,155 @@
 /**
- * Test Runner Example
- * Demonstrates how to use the ScenarioExecutor directly
+ * Test Runner - Scalable Multi-Scenario Executor
+ * Discovers and executes all test scenarios from the test-scenarios folder
  */
 
 import { ScenarioExecutor } from '../server/scenario-executer';
 import { createLogger } from '../utils/logger';
 import path from 'path';
+import fs from 'fs';
 
 const logger = createLogger('TestRunner');
 
-async function runTest() {
+interface ScenarioSummary {
+  scenarioName: string;
+  scenarioId: string;
+  status: 'passed' | 'failed';
+  passed: number;
+  failed: number;
+  skipped: number;
+  duration: number;
+  error?: string;
+}
+
+async function runAllScenarios() {
   logger.info('='.repeat(60));
-  logger.info('MCP-Playwright Test Runner - Step 1');
+  logger.info('MCP-Playwright Test Runner - Multi-Scenario Execution');
   logger.info('='.repeat(60));
 
   try {
-    // Create executor
     const executor = new ScenarioExecutor();
+    const scenariosDir = path.join(process.cwd(), 'test-scenarios');
 
-    // Path to scenario
-    const scenarioPath = path.join(
-      process.cwd(),
-      'test-scenarios',
-      'sample-scenario.json'
-    );
+    // Validate scenarios directory exists
+    if (!fs.existsSync(scenariosDir)) {
+      throw new Error(`test-scenarios directory not found: ${scenariosDir}`);
+    }
 
-    logger.info('Starting test execution', { scenarioPath });
+    // Discover all scenario files
+    const scenarioFiles = fs
+      .readdirSync(scenariosDir)
+      .filter((file) => file.endsWith('.json'))
+      .sort();
 
-    // Execute scenario
-    const result = await executor.executeScenario(scenarioPath, {
-      headless: process.env.HEADLESS === 'true',
-      screenshot: true,
-      timeout: 30000,
-      persistHealedLocators: true,
-    });
+    if (scenarioFiles.length === 0) {
+      throw new Error('No scenario files (.json) found in test-scenarios folder');
+    }
+
+    logger.info(`Discovered ${scenarioFiles.length} scenario(s)`, { scenarioFiles });
+
+    // Execute scenarios and collect results
+    const summaries: ScenarioSummary[] = [];
+    let totalDuration = 0;
+
+    for (const file of scenarioFiles) {
+      const scenarioPath = path.join(scenariosDir, file);
+      logger.info(`Executing scenario: ${file}`);
+
+      try {
+        const result = await executor.executeScenario(scenarioPath, {
+          headless: process.env.HEADLESS !== 'false',
+          screenshot: true,
+          timeout: 30000,
+          persistHealedLocators: true,
+        });
+
+        const status = result.failed === 0 ? 'passed' : 'failed';
+        summaries.push({
+          scenarioName: result.scenarioName,
+          scenarioId: result.scenarioId,
+          status,
+          passed: result.passed,
+          failed: result.failed,
+          skipped: result.skipped,
+          duration: result.duration,
+        });
+
+        totalDuration += result.duration;
+        logger.info(`Scenario completed: ${file}`, { status });
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        summaries.push({
+          scenarioName: file,
+          scenarioId: file,
+          status: 'failed',
+          passed: 0,
+          failed: 1,
+          skipped: 0,
+          duration: 0,
+          error: errorMsg,
+        });
+
+        logger.error(`Scenario failed: ${file}`, { error: errorMsg });
+      }
+    }
 
     // Display results
     logger.info('='.repeat(60));
     logger.info('TEST EXECUTION RESULTS');
     logger.info('='.repeat(60));
-    
-    console.log('\nScenario:', result.scenarioName);
-    console.log('Scenario ID:', result.scenarioId);
-    console.log('Base URL:', result.baseUrl);
-    console.log('Browser:', result.browserType);
-    console.log('\n--- Summary ---');
-    console.log('Total Test Cases:', result.totalTestCases);
-    console.log('✓ Passed:', result.passed);
-    console.log('✗ Failed:', result.failed);
-    console.log('○ Skipped:', result.skipped);
-    console.log('Duration:', `${result.duration}ms`);
-    
-    console.log('\n--- Test Cases ---');
-    result.testCaseResults.forEach((tc, index) => {
-      const icon = tc.status === 'passed' ? '✓' : tc.status === 'failed' ? '✗' : '○';
-      console.log(`${icon} ${index + 1}. ${tc.testCaseName} (${tc.status})`);
-      if (tc.failureReason) {
-        console.log(`   Reason: ${tc.failureReason}`);
+
+    const passedScenarios = summaries.filter((s) => s.status === 'passed').length;
+    const failedScenarios = summaries.filter((s) => s.status === 'failed').length;
+    const totalTests = summaries.reduce((sum, s) => sum + (s.passed + s.failed + s.skipped), 0);
+    const totalPassed = summaries.reduce((sum, s) => sum + s.passed, 0);
+    const totalFailed = summaries.reduce((sum, s) => sum + s.failed, 0);
+    const totalSkipped = summaries.reduce((sum, s) => sum + s.skipped, 0);
+
+    console.log('\n--- Overall Summary ---');
+    console.log(`Total Scenarios: ${summaries.length}`);
+    console.log(`✓ Scenarios Passed: ${passedScenarios}`);
+    console.log(`✗ Scenarios Failed: ${failedScenarios}`);
+
+    console.log('\n--- Test Cases Summary ---');
+    console.log(`Total Test Cases: ${totalTests}`);
+    console.log(`✓ Passed: ${totalPassed}`);
+    console.log(`✗ Failed: ${totalFailed}`);
+    console.log(`○ Skipped: ${totalSkipped}`);
+    console.log(`Total Duration: ${totalDuration}ms`);
+
+    console.log('\n--- Scenario Details ---');
+    summaries.forEach((summary, index) => {
+      const icon = summary.status === 'passed' ? '✓' : '✗';
+      console.log(`${icon} ${index + 1}. ${summary.scenarioName}`);
+      console.log(
+        `   Passed: ${summary.passed}, Failed: ${summary.failed}, Skipped: ${summary.skipped}, Duration: ${summary.duration}ms`
+      );
+      if (summary.error) {
+        console.log(`   Error: ${summary.error}`);
       }
     });
 
     logger.info('='.repeat(60));
-    logger.info('Test execution completed successfully');
-    logger.info('='.repeat(60));
 
+    // Exit with appropriate status
+    if (failedScenarios === 0) {
+      logger.info('All scenarios completed successfully');
+      logger.info('='.repeat(60));
+      process.exit(0);
+    } else {
+      logger.error(`${failedScenarios} scenario(s) failed`);
+      logger.info('='.repeat(60));
+      process.exit(1);
+    }
   } catch (error) {
     logger.error('Test execution failed', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
     });
-    
+
     console.error('\n❌ Test execution failed:', error);
     process.exit(1);
   }
 }
 
-// Run the test
-runTest();
+runAllScenarios();
