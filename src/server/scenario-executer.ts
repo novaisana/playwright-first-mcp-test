@@ -14,6 +14,8 @@ import {
   TestStatus,
   StepResult,
   TestAssertion,
+  TestCase,
+  TestStep,
 } from '../types/index';
 import type { IBrowserManager, ILocatorHealer, IPageActions } from '../browser/contracts';
 import { BrowserManager } from '../browser/browser-manager';
@@ -123,14 +125,20 @@ export class ScenarioExecutor {
                     stepId: step.id,
                   }, markScenarioDirty);
                   const assertionResults = await this.pageActions.assert(page, assertions, step.timeout);
-                  stepResults.push({
-                    stepId: step.id,
-                    action: step.action,
-                    status: 'passed',
-                    duration: Date.now() - stepStart,
-                    assertionResults,
+                  
+                  const stepResult = await this.buildStepResult(
+                    scenario,
+                    testCase,
+                    step,
+                    Date.now() - stepStart,
                     timestamp,
-                  });
+                    'passed',
+                    options,
+                    page,
+                    undefined,
+                    assertionResults
+                  );
+                  stepResults.push(stepResult);
                   continue;
                 }
                 default: {
@@ -139,32 +147,32 @@ export class ScenarioExecutor {
                 }
               }
 
-              stepResults.push({
-                stepId: step.id,
-                action: step.action,
-                status: 'passed',
-                duration: Date.now() - stepStart,
+              const stepResult = await this.buildStepResult(
+                scenario,
+                testCase,
+                step,
+                Date.now() - stepStart,
                 timestamp,
-              });
-            } catch (error) {
-              const errMsg = error instanceof Error ? error.message : String(error);
-              const screenshotPath = await this.tryScreenshot(
-                scenario.scenarioId,
-                testCase.id,
-                step.id,
+                'passed',
                 options,
                 page
               );
-
-              stepResults.push({
-                stepId: step.id,
-                action: step.action,
-                status: 'failed',
-                duration: Date.now() - stepStart,
-                error: errMsg,
-                screenshot: screenshotPath ?? undefined,
+              stepResults.push(stepResult);
+            } catch (error) {
+              const errMsg = error instanceof Error ? error.message : String(error);
+              
+              const stepResult = await this.buildStepResult(
+                scenario,
+                testCase,
+                step,
+                Date.now() - stepStart,
                 timestamp,
-              });
+                'failed',
+                options,
+                page,
+                errMsg
+              );
+              stepResults.push(stepResult);
 
               tcStatus = 'failed';
               failureReason = errMsg;
@@ -236,10 +244,60 @@ export class ScenarioExecutor {
     return scenarioResult;
   }
 
+  /**
+   * Build a step result with optional screenshot capture
+   * Common logic for both successful and failed steps
+   */
+  private async buildStepResult(
+    scenario: TestScenario,
+    testCase: TestCase,
+    step: TestStep,
+    duration: number,
+    timestamp: Date,
+    status: TestStatus,
+    options: ExecutionOptions,
+    page: any,
+    error?: string,
+    assertionResults?: any[]
+  ): Promise<StepResult> {
+    // Capture screenshot for every step (success or failure)
+    const screenshot = await this.tryScreenshot(
+      scenario.scenarioId,
+      testCase.id,
+      step.id,
+      step.description,
+      options,
+      page
+    );
+
+    const result: StepResult = {
+      stepId: step.id,
+      action: step.action,
+      status,
+      duration,
+      timestamp,
+    };
+
+    if (screenshot) {
+      result.screenshot = screenshot;
+    }
+
+    if (error) {
+      result.error = error;
+    }
+
+    if (assertionResults) {
+      result.assertionResults = assertionResults;
+    }
+
+    return result;
+  }
+
   private async tryScreenshot(
     scenarioId: string,
     testCaseId: string,
     stepId: string,
+    stepDescription: string,
     options: ExecutionOptions,
     page: { screenshot: (opts: { path: string; fullPage: boolean }) => Promise<unknown> }
   ): Promise<string | null> {
@@ -248,7 +306,14 @@ export class ScenarioExecutor {
     try {
       const dir = path.join(process.cwd(), 'test-results', scenarioId, testCaseId);
       fs.mkdirSync(dir, { recursive: true });
-      const file = `${stepId}-${Date.now()}.png`;
+      
+      // Create filename with step ID and sanitized description and timestamp
+      const sanitizedDescription = stepDescription
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+      
+      const file = `${stepId}-${sanitizedDescription}-${Date.now()}.png`;
       const fullPath = path.join(dir, file);
       await page.screenshot({ path: fullPath, fullPage: true });
       return fullPath;

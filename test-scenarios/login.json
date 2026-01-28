@@ -1,6 +1,6 @@
 {
-  "scenarioId": "sample-test-001",
-  "scenarioName": "Sample Login Test Scenario",
+  "scenarioId": "login-test-001",
+  "scenarioName": "Login Test Scenario",
   "baseUrl": "https://www.saucedemo.com",
   "browserType": "chromium",
   "testCases": [

@@ -1,0 +1,91 @@
+{
+    "scenarioId": "add-to-cart-test-001",
+    "scenarioName": "Add to Cart Test Scenario",
+    "baseUrl": "https://www.saucedemo.com",
+    "browserType": "chromium",
+    "testCases": [
+      {
+        "id": "tc-001",
+        "name": "add product to cart",
+        "description": "add product to cart",
+        "priority": "high",
+        "tags": [
+          "ui",
+          "validation"
+        ],
+        "steps": [
+          {
+            "id": "step-001",
+            "action": "navigate",
+            "value": "/",
+            "description": "Navigate to login page",
+            "timeout": 30000
+          },
+          {
+            "id": "step-002",
+            "action": "type",
+            "target": "input[id='user-name']",
+            "value": "standard_user",
+            "description": "Enter username"
+          },
+          {
+            "id": "step-003",
+            "action": "type",
+            "target": "input[id='password']",
+            "value": "secret_sauce",
+            "description": "Enter password"
+          },
+          {
+            "id": "step-004",
+            "action": "click",
+            "target": "#login-button",
+            "description": "Click login button"
+          },
+          {
+            "id": "step-005",
+            "action": "assert",
+            "description": "Verify home page is loaded",
+            "assertions": [
+              {
+                "type": "url",
+                "target": "body",
+                "expected": "/inventory.html",
+                "description": "URL should navigate to inventory page"
+              },
+              {
+                "type": "text",
+                "target": ".app_logo",
+                "expected": "Swag Labs",
+                "description": "Swag Labs logo should be visible"
+              }
+            ]
+          },
+          {
+            "id": "step-006",
+            "action": "click",
+            "target": "[id='add-to-cart-sauce-labs-backpack']",
+            "description": "Add product to cart"
+          },
+          {
+            "id": "step-007",
+            "action": "click",
+            "target": "[data-test='shopping-cart-link']",
+            "description": "Open cart"
+          },
+          {
+            "id": "step-008",
+            "action": "assert",
+            "description": "Verify if item is added to cart",
+            "assertions": [
+              {
+                "type": "text",
+                "target": "[data-test='title']",
+                "expected": "Your Cart",
+                "description": "Cart page title should be visible"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
