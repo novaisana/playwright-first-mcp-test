@@ -11,7 +11,7 @@ Execute and manage E2E tests using **declarative JSON scenarios** and **MCP prot
 - ✅ AI-orchestrated test execution (Claude can call test tools)
 - ✅ Comprehensive reporting (JSON + screenshots)
 - ✅ Multi-browser testing (Chromium, Firefox, WebKit)
-- ✅ Use MCP to menage test context and configurations
+- ✅ Use MCP for test execution, context menagment and define test configurations
 
 ---
 
