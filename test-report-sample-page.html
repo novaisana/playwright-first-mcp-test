@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Report - Regression Test Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #2d2d2d;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #a8c5dd;
+            color: #2d2d2d;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: #96b8d1;
+        }
+
+        .report-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d2d2d;
+        }
+
+        .report-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .summary {
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .summary-value.passed {
+            color: #7fb89b;
+        }
+
+        .summary-value.failed {
+            color: #f4b4c4;
+        }
+
+        /* Scenarios List */
+        .scenarios-list {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Scenario Item */
+        .scenario-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .scenario-header {
+            display: grid;
+            grid-template-columns: 180px 1fr 150px 120px 50px;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f4f8;
+            cursor: pointer;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .scenario-header:hover {
+            background-color: #e8eef5;
+        }
+
+        .scenario-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .scenario-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .scenario-duration {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .scenario-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .scenario-status.passed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .scenario-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            color: #666;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .scenario-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Scenario Tests Container */
+        .scenario-tests {
+            display: none;
+            padding: 20px;
+            background-color: #fafafa;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .scenario-item.expanded .scenario-tests {
+            display: block;
+        }
+
+        .scenario-summary {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .scenario-summary-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .scenario-summary-label {
+            color: #666;
+        }
+
+        .scenario-summary-value {
+            font-weight: 600;
+        }
+
+        /* Test Case Item */
+        .test-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .test-header {
+            display: grid;
+            grid-template-columns: 100px 1fr 120px 120px 50px;
+            gap: 15px;
+            padding: 20px;
+            background-color: #fafafa;
+            cursor: pointer;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .test-header:hover {
+            background-color: #f5f5f5;
+        }
+
+        .test-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .test-description {
+            font-size: 15px;
+            color: #2d2d2d;
+        }
+
+        .test-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .test-status.passed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .test-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .evidence-link {
+            padding: 6px 12px;
+            background-color: #f9c89b;
+            color: #2d2d2d;
+            border-radius: 6px;
+            font-size: 13px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .evidence-link:hover {
+            background-color: #f7b87d;
+        }
+
+        .test-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Steps */
+        .test-steps {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .test-item.expanded .test-steps {
+            display: block;
+        }
+
+        .step {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #a8c5dd;
+        }
+
+        .step.failed {
+            border-left-color: #f4b4c4;
+            background-color: #fff5f5;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .step-id {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .step-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .step-status {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step-status.passed {
+            color: #7fb89b;
+        }
+
+        .step-status.failed {
+            color: #f4b4c4;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #444;
+            margin-top: 5px;
+        }
+
+        .step-details {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .step-details code {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .assertion {
+            margin-top: 8px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .assertion.failed {
+            background-color: #fff0f0;
+        }
+
+        .assertion-type {
+            font-weight: 600;
+            color: #7fb89b;
+        }
+
+        .assertion-type.failed {
+            color: #f4b4c4;
+        }
+
+        .error-info {
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #fff0f0;
+            border-left: 3px solid #f4b4c4;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            font-size: 13px;
+            font-weight: 600;
+            color: #721c24;
+            margin-bottom: 5px;
+        }
+
+        .error-stack {
+            font-size: 12px;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            color: #2d2d2d;
+        }
+
+        .evidence-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .evidence-container video {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .evidence-container pre {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .evidence-container h3 {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #2d2d2d;
+        }
+
+        .evidence-container h3:first-child {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="#" class="back-button">← Back to Dashboard</a>
+            
+            <h1 class="report-title">Regression Test Suite - Sprint 24</h1>
+            
+            <div class="report-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Report ID</span>
+                    <span class="meta-value">report-20260126-143215</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Execution Started</span>
+                    <span class="meta-value">2026-01-26 14:32:15</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Duration</span>
+                    <span class="meta-value">13m 17.8s</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Environment</span>
+                    <span class="meta-value">Staging</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Browser</span>
+                    <span class="meta-value">Chromium 120</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Parallelism</span>
+                    <span class="meta-value">4 threads</span>
+                </div>
+            </div>
+
+            <div class="summary">
+                <div class="summary-item">
+                    <span class="summary-label">Scenarios:</span>
+                    <span class="summary-value">3</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Total Tests:</span>
+                    <span class="summary-value">8</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Passed:</span>
+                    <span class="summary-value passed">7</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Failed:</span>
+                    <span class="summary-value failed">1</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Success Rate:</span>
+                    <span class="summary-value">87.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scenarios-list">
+            <!-- Scenario 1: Login Test -->
+            <div class="scenario-item">
+                <div class="scenario-header" onclick="toggleScenario(this)">
+                    <span class="scenario-id">login-test-001</span>
+                    <span class="scenario-name">Login Test Scenario</span>
+                    <span class="scenario-duration">45.3s</span>
+                    <span class="scenario-status passed">PASSED</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="scenario-tests">
+                    <div class="scenario-summary">
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Base URL:</span>
+                            <span class="scenario-summary-value">saucedemo.com</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Tests:</span>
+                            <span class="scenario-summary-value">2</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Passed:</span>
+                            <span class="scenario-summary-value" style="color: #7fb89b;">2</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Failed:</span>
+                            <span class="scenario-summary-value">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Test Case 1 -->
+                    <div class="test-item">
+                        <div class="test-header" onclick="toggleTest(this)">
+                            <span class="test-id">tc-001</span>
+                            <span class="test-description">Navigate to Homepage - Verify that the homepage loads successfully</span>
+                            <span class="test-status passed">PASSED</span>
+                            <a href="#" class="evidence-link" onclick="event.stopPropagation(); openEvidence('tc-001')">Evidence</a>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="test-steps">
+                            <div class="step failed">
+                                <div class="step-header">
+                                    <span class="step-id">step-002</span>
+                                    <span class="step-action">ASSERT</span>
+                                    <span class="step-status failed">✗ FAILED</span>
+                                </div>
+                                <div class="step-description">Verify products are sorted correctly</div>
+                                <div class="step-details">Duration: <code>281.7s</code></div>
+                                <div class="assertion failed">
+                                    <span class="assertion-type failed">✗ custom:</span> Names should be in descending order
+                                    <br>Target: <code>div.inventory_item_name</code> | Expected: <code>descending order</code> | Actual: <code>ascending order</code>
+                                </div>
+                                <div class="error-info">
+                                    <div class="error-message">AssertionError: Expected products to be in Z-A order</div>
+                                    <div class="error-stack">at step-002 (test-008.js:45:12)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Modal -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEvidence()">&times;</button>
+            <h2 id="evidenceTitle">Test Evidence</h2>
+            <div id="evidenceContainer" class="evidence-container">
+                <!-- Evidence content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleScenario(element) {
+            const scenarioItem = element.parentElement;
+            scenarioItem.classList.toggle('expanded');
+        }
+
+        function toggleTest(element) {
+            const testItem = element.parentElement;
+            testItem.classList.toggle('expanded');
+        }
+
+        function openEvidence(testId) {
+            const modal = document.getElementById('evidenceModal');
+            const title = document.getElementById('evidenceTitle');
+            const container = document.getElementById('evidenceContainer');
+            
+            title.textContent = `Evidence for ${testId}`;
+            
+            // Example evidence types - replace with actual data
+            const evidenceData = {
+                'tc-001': `
+                    <h3>Screenshot</h3>
+                    <img src="https://via.placeholder.com/800x450/a8c5dd/2d2d2d?text=Homepage+Screenshot" alt="Homepage screenshot">
+                `,
+                'tc-002': `
+                    <h3>Screenshots</h3>
+                    <img src="https://via.placeholder.com/800x450/f9c89b/2d2d2d?text=Login+Form+Screenshot" alt="Login form screenshot">
+                    <img src="https://via.placeholder.com/800x450/7fb89b/2d2d2d?text=Success+Page+Screenshot" alt="Success page screenshot">
+                    
+                    <h3>Request Payload</h3>
+                    <pre>{
+  "username": "standard_user",
+  "password": "***********",
+  "timestamp": "2026-01-26T14:32:25.123Z"
+}</pre>
+                `,
+                'tc-003': `
+                    <h3>Screenshot</h3>
+                    <img src="https://via.placeholder.com/800x450/b8a8d8/2d2d2d?text=Product+Page+Screenshot" alt="Product page screenshot">
+                `,
+                'tc-004': `
+                    <h3>Screenshot</h3>
+                    <img src="https://via.placeholder.com/800x450/f6d186/2d2d2d?text=Cart+Page+Screenshot" alt="Cart page screenshot">
+                `,
+                'tc-008': `
+                    <h3>Error Screenshot</h3>
+                    <img src="https://via.placeholder.com/800x450/f4b4c4/2d2d2d?text=Error+State+Screenshot" alt="Error state screenshot">
+                    
+                    <h3>Test Recording</h3>
+                    <video controls>
+                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `
+            };
+            
+            container.innerHTML = evidenceData[testId] || '<p>No evidence available for this test.</p>';
+            modal.classList.add('active');
+        }
+
+        function closeEvidence() {
+            const modal = document.getElementById('evidenceModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('evidenceModal');
+            if (event.target === modal) {
+                closeEvidence();
+            }
+        }
+    </script>
+</body>
+</html">
+                                <div class="step-header">
+                                    <span class="step-id">step-001</span>
+                                    <span class="step-action">NAVIGATE</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Navigate to login page</div>
+                                <div class="step-details">
+                                    Target: <code>/</code> | Timeout: <code>30000ms</code> | Duration: <code>3.15s</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-002</span>
+                                    <span class="step-action">ASSERT</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Verify page title</div>
+                                <div class="step-details">Duration: <code>20.2s</code></div>
+                                <div class="assertion">
+                                    <span class="assertion-type">✓ visible:</span> Page body should be visible
+                                    <br>Target: <code>body</code> | Expected: <code>true</code> | Actual: <code>true</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test Case 2 -->
+                    <div class="test-item">
+                        <div class="test-header" onclick="toggleTest(this)">
+                            <span class="test-id">tc-002</span>
+                            <span class="test-description">Execute login - execute login with valid credentials</span>
+                            <span class="test-status passed">PASSED</span>
+                            <a href="#" class="evidence-link" onclick="event.stopPropagation(); openEvidence('tc-002')">Evidence</a>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="test-steps">
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-001</span>
+                                    <span class="step-action">TYPE</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Enter username</div>
+                                <div class="step-details">
+                                    Target: <code>input[id='user-name']</code> | Value: <code>standard_user</code> | Duration: <code>1.67s</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-002</span>
+                                    <span class="step-action">TYPE</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Enter password</div>
+                                <div class="step-details">
+                                    Target: <code>input[id='password']</code> | Value: <code>•••••••••••</code> | Duration: <code>1.77s</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-003</span>
+                                    <span class="step-action">CLICK</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Click login button</div>
+                                <div class="step-details">
+                                    Target: <code>#login-button</code> | Duration: <code>4.31s</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-004</span>
+                                    <span class="step-action">ASSERT</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Verify home page is loaded</div>
+                                <div class="step-details">Duration: <code>14.1s</code></div>
+                                <div class="assertion">
+                                    <span class="assertion-type">✓ url:</span> URL should navigate to inventory page
+                                    <br>Target: <code>body</code> | Expected: <code>/inventory.html</code> | Actual: <code>/inventory.html</code>
+                                </div>
+                                <div class="assertion">
+                                    <span class="assertion-type">✓ text:</span> Swag Labs logo should be visible
+                                    <br>Target: <code>div.app_logo</code> | Expected: <code>Swag Labs</code> | Actual: <code>Swag Labs</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 2: Checkout Flow -->
+            <div class="scenario-item">
+                <div class="scenario-header" onclick="toggleScenario(this)">
+                    <span class="scenario-id">checkout-test-002</span>
+                    <span class="scenario-name">Checkout Flow Test Scenario</span>
+                    <span class="scenario-duration">3m 15.3s</span>
+                    <span class="scenario-status passed">PASSED</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="scenario-tests">
+                    <div class="scenario-summary">
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Base URL:</span>
+                            <span class="scenario-summary-value">saucedemo.com</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Tests:</span>
+                            <span class="scenario-summary-value">4</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Passed:</span>
+                            <span class="scenario-summary-value" style="color: #7fb89b;">4</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Failed:</span>
+                            <span class="scenario-summary-value">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Test Case 3 -->
+                    <div class="test-item">
+                        <div class="test-header" onclick="toggleTest(this)">
+                            <span class="test-id">tc-003</span>
+                            <span class="test-description">Add product to cart - Verify user can add product to shopping cart</span>
+                            <span class="test-status passed">PASSED</span>
+                            <a href="#" class="evidence-link" onclick="event.stopPropagation(); openEvidence('tc-003')">Evidence</a>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="test-steps">
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-001</span>
+                                    <span class="step-action">CLICK</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Click add to cart button</div>
+                                <div class="step-details">
+                                    Target: <code>button[data-test='add-to-cart-sauce-labs-backpack']</code> | Duration: <code>1.85s</code>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-002</span>
+                                    <span class="step-action">ASSERT</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Verify cart badge shows 1 item</div>
+                                <div class="step-details">Duration: <code>42.97s</code></div>
+                                <div class="assertion">
+                                    <span class="assertion-type">✓ text:</span> Cart badge should display 1
+                                    <br>Target: <code>span.shopping_cart_badge</code> | Expected: <code>1</code> | Actual: <code>1</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional test cases tc-004, tc-005, tc-006 would follow similar structure -->
+                    <div class="test-item">
+                        <div class="test-header" onclick="toggleTest(this)">
+                            <span class="test-id">tc-004</span>
+                            <span class="test-description">View cart - Navigate to cart and verify product is listed</span>
+                            <span class="test-status passed">PASSED</span>
+                            <a href="#" class="evidence-link" onclick="event.stopPropagation(); openEvidence('tc-004')">Evidence</a>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="test-steps">
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-001</span>
+                                    <span class="step-action">CLICK</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Click cart icon</div>
+                                <div class="step-details">
+                                    Target: <code>a.shopping_cart_link</code> | Duration: <code>3.08s</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 3: Product Filter (with failure) -->
+            <div class="scenario-item">
+                <div class="scenario-header" onclick="toggleScenario(this)">
+                    <span class="scenario-id">product-filter-test-003</span>
+                    <span class="scenario-name">Product Filter Test Scenario</span>
+                    <span class="scenario-duration">9m 17.2s</span>
+                    <span class="scenario-status failed">FAILED</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="scenario-tests">
+                    <div class="scenario-summary">
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Base URL:</span>
+                            <span class="scenario-summary-value">saucedemo.com</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Tests:</span>
+                            <span class="scenario-summary-value">2</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Passed:</span>
+                            <span class="scenario-summary-value" style="color: #7fb89b;">1</span>
+                        </div>
+                        <div class="scenario-summary-item">
+                            <span class="scenario-summary-label">Failed:</span>
+                            <span class="scenario-summary-value" style="color: #f4b4c4;">1</span>
+                        </div>
+                    </div>
+
+                    <!-- Test Case 8 (Failed) -->
+                    <div class="test-item">
+                        <div class="test-header" onclick="toggleTest(this)">
+                            <span class="test-id">tc-008</span>
+                            <span class="test-description">Filter by name Z to A - Verify products can be sorted by name descending</span>
+                            <span class="test-status failed">FAILED</span>
+                            <a href="#" class="evidence-link" onclick="event.stopPropagation(); openEvidence('tc-008')">Evidence</a>
+                            <span class="expand-icon">▼</span>
+                        </div>
+                        <div class="test-steps">
+                            <div class="step">
+                                <div class="step-header">
+                                    <span class="step-id">step-001</span>
+                                    <span class="step-action">SELECT</span>
+                                    <span class="step-status passed">✓ PASSED</span>
+                                </div>
+                                <div class="step-description">Select name Z to A</div>
+                                <div class="step-details">
+                                    Target: <code>select.product_sort_container</code> | Value: <code>za</code> | Duration: <code>2.8s</code>
+                                </div>
+                            </div>
+                            <div class="step
