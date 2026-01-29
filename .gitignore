@@ -14,11 +14,12 @@ logs/
 *.log
 npm-debug.log*
 
-# Test results
+# Test results and reports
 test-results/
 playwright-report/
 test-results/screenshots/
 test-results/reports/
+reports/
 
 # Environment variables
 .env

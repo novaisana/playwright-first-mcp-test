@@ -5,8 +5,12 @@
 
 import { ScenarioExecutor } from '../server/scenario-executer';
 import { createLogger } from '../utils/logger';
+import { ReportGenerator } from '../reporter/report-generator';
+import { ReportWriter } from '../reporter/report-writer';
+import { generateTestRunId } from '../reporter/test-run-id-generator';
 import path from 'path';
 import fs from 'fs';
+import { ScenarioResult } from '../types';
 
 const logger = createLogger('TestRunner');
 
@@ -25,6 +29,9 @@ async function runAllScenarios() {
   logger.info('='.repeat(60));
   logger.info('MCP-Playwright Test Runner - Multi-Scenario Execution');
   logger.info('='.repeat(60));
+
+  const executionStartTime = new Date();
+  const testRunId = generateTestRunId(executionStartTime);
 
   try {
     const executor = new ScenarioExecutor();
@@ -48,6 +55,7 @@ async function runAllScenarios() {
     logger.info(`Discovered ${scenarioFiles.length} scenario(s)`, { scenarioFiles });
 
     // Execute scenarios and collect results
+    const scenarioResults: ScenarioResult[] = [];
     const summaries: ScenarioSummary[] = [];
     let totalDuration = 0;
 
@@ -62,6 +70,8 @@ async function runAllScenarios() {
           timeout: 30000,
           persistHealedLocators: true,
         });
+
+        scenarioResults.push(result);
 
         const status = result.failed === 0 ? 'passed' : 'failed';
         summaries.push({
@@ -128,6 +138,56 @@ async function runAllScenarios() {
         console.log(`   Error: ${summary.error}`);
       }
     });
+
+    // Generate and write report
+    logger.info('='.repeat(60));
+    logger.info('GENERATING TEST REPORT');
+    logger.info('='.repeat(60));
+
+    const executionEndTime = new Date();
+
+    try {
+      const reportGenerator = new ReportGenerator({
+        testRunId,
+        testRunName: `Test Run ${testRunId}`,
+        environment: process.env.TEST_ENVIRONMENT || 'development',
+        startTime: executionStartTime,
+        endTime: executionEndTime,
+        browserVersion: process.env.BROWSER_VERSION,
+        parallelism: 1,
+        retryFailed: 0,
+      });
+
+      const report = reportGenerator.generateReport(scenarioResults);
+
+      const reportWriter = new ReportWriter({
+        baseDir: path.join(process.cwd(), 'reports'),
+      });
+
+      const writeResult = await reportWriter.writeReport(report);
+      const htmlResult = await reportWriter.writeHtmlReport(report);
+
+      console.log('\n--- Report Generated ---');
+      console.log(`Report ID: ${report.reportId}`);
+      console.log(`Test Run ID: ${report.testRunId}`);
+      console.log(`JSON Report Location: ${writeResult.reportPath}`);
+      console.log(`HTML Report Location: ${htmlResult.htmlPath}`);
+      console.log(`Evidence Files Copied: ${writeResult.filesCreated - 1}`);
+      console.log(`Total Size: ${((writeResult.totalSize + htmlResult.size) / 1024).toFixed(2)} KB`);
+
+      logger.info('Report generated successfully', {
+        reportId: report.reportId,
+        testRunId,
+        jsonPath: writeResult.reportPath,
+        htmlPath: htmlResult.htmlPath,
+        filesCreated: writeResult.filesCreated,
+      });
+    } catch (reportError) {
+      const errorMsg = reportError instanceof Error ? reportError.message : String(reportError);
+      logger.error('Failed to generate report', { error: errorMsg });
+      console.error('Warning: Report generation failed:', errorMsg);
+      // Don't fail the entire execution if report generation fails
+    }
 
     logger.info('='.repeat(60));
 
