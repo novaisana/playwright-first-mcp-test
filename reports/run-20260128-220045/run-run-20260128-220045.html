@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Report - Test Run run-20260128-220045</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #2d2d2d;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .report-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d2d2d;
+        }
+
+        .report-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .summary {
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .summary-value.passed {
+            color: #7fb89b;
+        }
+
+        .summary-value.failed {
+            color: #f4b4c4;
+        }
+
+        /* Scenarios List */
+        .scenarios-list {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Scenario Item */
+        .scenario-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .scenario-header {
+            display: grid;
+            grid-template-columns: 180px 1fr 150px 120px 50px;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f4f8;
+            cursor: pointer;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .scenario-header:hover {
+            background-color: #e8eef5;
+        }
+
+        .scenario-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .scenario-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .scenario-duration {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .scenario-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .scenario-status.passed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .scenario-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            color: #666;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .scenario-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Scenario Tests Container */
+        .scenario-tests {
+            display: none;
+            padding: 20px;
+            background-color: #fafafa;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .scenario-item.expanded .scenario-tests {
+            display: block;
+        }
+
+        .scenario-summary {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .scenario-summary-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .scenario-summary-label {
+            color: #666;
+        }
+
+        .scenario-summary-value {
+            font-weight: 600;
+        }
+
+        /* Test Case Item */
+        .test-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .test-header {
+            display: grid;
+            grid-template-columns: 100px 1fr 120px 120px 50px;
+            gap: 15px;
+            padding: 20px;
+            background-color: #fafafa;
+            cursor: pointer;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .test-header:hover {
+            background-color: #f5f5f5;
+        }
+
+        .test-id {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .test-description {
+            font-size: 15px;
+            color: #2d2d2d;
+        }
+
+        .test-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .test-status.passed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .test-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .test-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Steps */
+        .test-steps {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .test-item.expanded .test-steps {
+            display: block;
+        }
+
+        .step {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #a8c5dd;
+        }
+
+        .step.failed {
+            border-left-color: #f4b4c4;
+            background-color: #fff5f5;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .step-id {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .step-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .step-status {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step-status.passed {
+            color: #7fb89b;
+        }
+
+        .step-status.failed {
+            color: #f4b4c4;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #444;
+            margin-top: 5px;
+        }
+
+        .step-details {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .step-details code {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .assertion {
+            margin-top: 8px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            font-size: 13px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .assertion.failed {
+            background-color: #fff0f0;
+            border-color: #f4b4c4;
+        }
+
+        .assertion-type {
+            font-weight: 600;
+            color: #7fb89b;
+        }
+
+        .assertion-type.failed {
+            color: #f4b4c4;
+        }
+
+        .assertion-details {
+            margin-top: 5px;
+            color: #444;
+        }
+
+        .error-info {
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #fff0f0;
+            border-left: 3px solid #f4b4c4;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            font-size: 13px;
+            font-weight: 600;
+            color: #721c24;
+            margin-bottom: 5px;
+        }
+    </style>
+  
+</head>
+<body>
+    <div class="container">
+        
+    <div class="header">
+      <h1 class="report-title">Test Run run-20260128-220045</h1>
+      
+      <div class="report-meta">
+        <div class="meta-item">
+          <span class="meta-label">Report ID</span>
+          <span class="meta-value">report-20260128-220045</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Execution Started</span>
+          <span class="meta-value">28/01/2026, 22:00:45</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Duration</span>
+          <span class="meta-value">9.9s</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Environment</span>
+          <span class="meta-value">development</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Browser</span>
+          <span class="meta-value">chromium</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Parallelism</span>
+          <span class="meta-value">1 thread</span>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="summary-item">
+          <span class="summary-label">Scenarios:</span>
+          <span class="summary-value">3</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Total Tests:</span>
+          <span class="summary-value">4</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Passed:</span>
+          <span class="summary-value passed">4</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Failed:</span>
+          <span class="summary-value failed">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Skipped:</span>
+          <span class="summary-value">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Success Rate:</span>
+          <span class="summary-value">100.0%</span>
+        </div>
+      </div>
+    </div>
+  
+        
+        <div class="scenarios-list">
+            
+    <div class="scenario-item">
+      <div class="scenario-header" onclick="toggleScenario(this)">
+        <span class="scenario-id">add-to-cart-test-001</span>
+        <span class="scenario-name">Add to Cart Test Scenario</span>
+        <span class="scenario-duration">5.1s</span>
+        <span class="scenario-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="scenario-tests">
+        <div class="scenario-summary">
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Base URL:</span>
+            <span class="scenario-summary-value">https://www.saucedemo.com</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Tests:</span>
+            <span class="scenario-summary-value">1</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Passed:</span>
+            <span class="scenario-summary-value" style="color: #7fb89b;">1</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Failed:</span>
+            <span class="scenario-summary-value" style="color: #f4b4c4;">0</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Skipped:</span>
+            <span class="scenario-summary-value">0</span>
+          </div>
+        </div>
+        
+    <div class="test-item">
+      <div class="test-header" onclick="toggleTest(this)">
+        <span class="test-id">tc-001</span>
+        <span class="test-description">add product to cart</span>
+        <span class="test-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="test-steps">
+  
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-001</span>
+        <span class="step-action">NAVIGATE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>3.51s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-002</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.04s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-003</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.02s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-004</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.10s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-005</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.02s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ url:</span> url OK: contains "/inventory.html"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>/inventory.html</code> | Actual: <code>https://www.saucedemo.com/inventory.html</code>
+      </div>
+    </div>
+  
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: .app_logo contains "Swag Labs"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Swag Labs</code> | Actual: <code>Swag Labs</code>
+      </div>
+    </div>
+  </div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-006</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.06s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-007</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.07s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-008</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.02s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: [data-test='title'] contains "Your Cart"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Your Cart</code> | Actual: <code>Your Cart</code>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  
+      </div>
+    </div>
+  
+
+    <div class="scenario-item">
+      <div class="scenario-header" onclick="toggleScenario(this)">
+        <span class="scenario-id">checkout-test-001</span>
+        <span class="scenario-name">Checkout Test Scenario</span>
+        <span class="scenario-duration">3.1s</span>
+        <span class="scenario-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="scenario-tests">
+        <div class="scenario-summary">
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Base URL:</span>
+            <span class="scenario-summary-value">https://www.saucedemo.com</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Tests:</span>
+            <span class="scenario-summary-value">1</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Passed:</span>
+            <span class="scenario-summary-value" style="color: #7fb89b;">1</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Failed:</span>
+            <span class="scenario-summary-value" style="color: #f4b4c4;">0</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Skipped:</span>
+            <span class="scenario-summary-value">0</span>
+          </div>
+        </div>
+        
+    <div class="test-item">
+      <div class="test-header" onclick="toggleTest(this)">
+        <span class="test-id">tc-001</span>
+        <span class="test-description">add product to cart</span>
+        <span class="test-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="test-steps">
+  
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-001</span>
+        <span class="step-action">NAVIGATE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.58s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-002</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.03s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-003</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.02s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-004</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.18s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-005</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.03s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ url:</span> url OK: contains "/inventory.html"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>/inventory.html</code> | Actual: <code>https://www.saucedemo.com/inventory.html</code>
+      </div>
+    </div>
+  
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: .app_logo contains "Swag Labs"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Swag Labs</code> | Actual: <code>Swag Labs</code>
+      </div>
+    </div>
+  </div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-006</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.07s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-007</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.06s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-008</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: [data-test='title'] contains "Your Cart"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Your Cart</code> | Actual: <code>Your Cart</code>
+      </div>
+    </div>
+  </div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-009</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.05s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-010</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-011</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-012</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-013</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.10s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-014</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.05s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-015</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: [data-test='complete-header'] contains "Thank you for your order!"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Thank you for your order!</code> | Actual: <code>Thank you for your order!</code>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  
+      </div>
+    </div>
+  
+
+    <div class="scenario-item">
+      <div class="scenario-header" onclick="toggleScenario(this)">
+        <span class="scenario-id">login-test-001</span>
+        <span class="scenario-name">Login Test Scenario</span>
+        <span class="scenario-duration">1.6s</span>
+        <span class="scenario-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="scenario-tests">
+        <div class="scenario-summary">
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Base URL:</span>
+            <span class="scenario-summary-value">https://www.saucedemo.com</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Tests:</span>
+            <span class="scenario-summary-value">2</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Passed:</span>
+            <span class="scenario-summary-value" style="color: #7fb89b;">2</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Failed:</span>
+            <span class="scenario-summary-value" style="color: #f4b4c4;">0</span>
+          </div>
+          <div class="scenario-summary-item">
+            <span class="scenario-summary-label">Skipped:</span>
+            <span class="scenario-summary-value">0</span>
+          </div>
+        </div>
+        
+    <div class="test-item">
+      <div class="test-header" onclick="toggleTest(this)">
+        <span class="test-id">tc-001</span>
+        <span class="test-description">Navigate to Homepage</span>
+        <span class="test-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="test-steps">
+  
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-001</span>
+        <span class="step-action">NAVIGATE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.40s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-002</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.01s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ visible:</span> visible OK: body
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>true</code> | Actual: <code>true</code>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  
+    <div class="test-item">
+      <div class="test-header" onclick="toggleTest(this)">
+        <span class="test-id">tc-002</span>
+        <span class="test-description">execute login</span>
+        <span class="test-status passed">PASSED</span>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="test-steps">
+  
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-001</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.06s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-002</span>
+        <span class="step-action">TYPE</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.02s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-003</span>
+        <span class="step-action">CLICK</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.13s</code></div></div>
+    <div class="step">
+      <div class="step-header">
+        <span class="step-id">step-004</span>
+        <span class="step-action">ASSERT</span>
+        <span class="step-status passed">✓ PASSED</span>
+      </div>
+  <div class="step-details">Duration: <code>0.03s</code></div>
+    <div class="assertion">
+      <span class="assertion-type">✓ url:</span> url OK: contains "/inventory.html"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>/inventory.html</code> | Actual: <code>https://www.saucedemo.com/inventory.html</code>
+      </div>
+    </div>
+  
+    <div class="assertion">
+      <span class="assertion-type">✓ text:</span> text OK: div.app_logo contains "Swag Labs"
+      <div class="assertion-details">
+        Target: <code>N/A</code> | Expected: <code>Swag Labs</code> | Actual: <code>Swag Labs</code>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  
+      </div>
+    </div>
+  
+        </div>
+    </div>
+
+    
+    <script>
+      function toggleScenario(element) {
+        const scenarioItem = element.parentElement;
+        scenarioItem.classList.toggle('expanded');
+      }
+
+      function toggleTest(element) {
+        const testItem = element.parentElement;
+        testItem.classList.toggle('expanded');
+      }
+    </script>
+  
+</body>
+</html>

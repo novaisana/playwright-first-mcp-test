@@ -1,0 +1,799 @@
+{
+  "reportId": "report-20260128-220045",
+  "testRunId": "run-20260128-220045",
+  "testRunName": "Test Run run-20260128-220045",
+  "environment": "development",
+  "execution": {
+    "startTime": "2026-01-29T01:00:45.072Z",
+    "endTime": "2026-01-29T01:00:54.959Z",
+    "duration": "9.9s",
+    "durationMs": 9887
+  },
+  "configuration": {
+    "browserType": "chromium",
+    "parallelism": 1,
+    "retryFailed": 0,
+    "timeout": 30000,
+    "headless": true
+  },
+  "summary": {
+    "totalScenarios": 3,
+    "totalTests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "successRate": 100
+  },
+  "scenarios": [
+    {
+      "scenarioId": "add-to-cart-test-001",
+      "scenarioName": "Add to Cart Test Scenario",
+      "baseUrl": "https://www.saucedemo.com",
+      "status": "passed",
+      "execution": {
+        "startTime": "2026-01-29T01:00:45.081Z",
+        "endTime": "2026-01-29T01:00:50.230Z",
+        "duration": "5.1s",
+        "durationMs": 5149
+      },
+      "summary": {
+        "totalTests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        {
+          "id": "tc-001",
+          "name": "add product to cart",
+          "description": "",
+          "status": "passed",
+          "priority": "medium",
+          "tags": [],
+          "execution": {
+            "startTime": "2026-01-29T01:00:45.316Z",
+            "endTime": "2026-01-29T01:00:49.965Z",
+            "duration": "4.6s",
+            "durationMs": 4649
+          },
+          "evidence": [
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-001-navigate-to-login-page-1769648448824.png",
+              "description": "Screenshot from step step-001",
+              "timestamp": "2026-01-29T01:00:45.316Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-002-enter-username-1769648448954.png",
+              "description": "Screenshot from step step-002",
+              "timestamp": "2026-01-29T01:00:48.915Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-003-enter-password-1769648449032.png",
+              "description": "Screenshot from step step-003",
+              "timestamp": "2026-01-29T01:00:49.010Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-004-click-login-button-1769648449186.png",
+              "description": "Screenshot from step step-004",
+              "timestamp": "2026-01-29T01:00:49.080Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-005-verify-home-page-is-loaded-1769648449345.png",
+              "description": "Screenshot from step step-005",
+              "timestamp": "2026-01-29T01:00:49.322Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-006-add-product-to-cart-1769648449552.png",
+              "description": "Screenshot from step step-006",
+              "timestamp": "2026-01-29T01:00:49.492Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-007-open-cart-1769648449765.png",
+              "description": "Screenshot from step step-007",
+              "timestamp": "2026-01-29T01:00:49.688Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-008-verify-if-item-is-added-to-cart-1769648449889.png",
+              "description": "Screenshot from step step-008",
+              "timestamp": "2026-01-29T01:00:49.870Z"
+            }
+          ],
+          "steps": [
+            {
+              "id": "step-001",
+              "action": "navigate",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:45.316Z",
+                "endTime": "2026-01-29T01:00:48.824Z",
+                "duration": "3.5s",
+                "durationMs": 3508
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-002",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:48.915Z",
+                "endTime": "2026-01-29T01:00:48.954Z",
+                "duration": "0.0s",
+                "durationMs": 39
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-003",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.010Z",
+                "endTime": "2026-01-29T01:00:49.031Z",
+                "duration": "0.0s",
+                "durationMs": 21
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-004",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.080Z",
+                "endTime": "2026-01-29T01:00:49.185Z",
+                "duration": "0.1s",
+                "durationMs": 105
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-005",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.322Z",
+                "endTime": "2026-01-29T01:00:49.345Z",
+                "duration": "0.0s",
+                "durationMs": 23
+              },
+              "assertions": [
+                {
+                  "type": "url",
+                  "target": "",
+                  "expected": "/inventory.html",
+                  "actual": "https://www.saucedemo.com/inventory.html",
+                  "description": "url OK: contains \"/inventory.html\"",
+                  "status": "passed"
+                },
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Swag Labs",
+                  "actual": "Swag Labs",
+                  "description": "text OK: .app_logo contains \"Swag Labs\"",
+                  "status": "passed"
+                }
+              ]
+            },
+            {
+              "id": "step-006",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.492Z",
+                "endTime": "2026-01-29T01:00:49.552Z",
+                "duration": "0.1s",
+                "durationMs": 60
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-007",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.688Z",
+                "endTime": "2026-01-29T01:00:49.763Z",
+                "duration": "0.1s",
+                "durationMs": 75
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-008",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:49.870Z",
+                "endTime": "2026-01-29T01:00:49.889Z",
+                "duration": "0.0s",
+                "durationMs": 19
+              },
+              "assertions": [
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Your Cart",
+                  "actual": "Your Cart",
+                  "description": "text OK: [data-test='title'] contains \"Your Cart\"",
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenarioId": "checkout-test-001",
+      "scenarioName": "Checkout Test Scenario",
+      "baseUrl": "https://www.saucedemo.com",
+      "status": "passed",
+      "execution": {
+        "startTime": "2026-01-29T01:00:50.239Z",
+        "endTime": "2026-01-29T01:00:53.301Z",
+        "duration": "3.1s",
+        "durationMs": 3062
+      },
+      "summary": {
+        "totalTests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        {
+          "id": "tc-001",
+          "name": "add product to cart",
+          "description": "",
+          "status": "passed",
+          "priority": "medium",
+          "tags": [],
+          "execution": {
+            "startTime": "2026-01-29T01:00:50.516Z",
+            "endTime": "2026-01-29T01:00:53.208Z",
+            "duration": "2.7s",
+            "durationMs": 2692
+          },
+          "evidence": [
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-001-navigate-to-login-page-1769648451095.png",
+              "description": "Screenshot from step step-001",
+              "timestamp": "2026-01-29T01:00:50.516Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-002-enter-username-1769648451271.png",
+              "description": "Screenshot from step step-002",
+              "timestamp": "2026-01-29T01:00:51.238Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-003-enter-password-1769648451356.png",
+              "description": "Screenshot from step step-003",
+              "timestamp": "2026-01-29T01:00:51.336Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-004-click-login-button-1769648451610.png",
+              "description": "Screenshot from step step-004",
+              "timestamp": "2026-01-29T01:00:51.425Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-005-verify-home-page-is-loaded-1769648451800.png",
+              "description": "Screenshot from step step-005",
+              "timestamp": "2026-01-29T01:00:51.772Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-006-add-product-to-cart-1769648452184.png",
+              "description": "Screenshot from step step-006",
+              "timestamp": "2026-01-29T01:00:52.117Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-007-open-cart-1769648452407.png",
+              "description": "Screenshot from step step-007",
+              "timestamp": "2026-01-29T01:00:52.349Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-008-verify-if-item-is-added-to-cart-1769648452462.png",
+              "description": "Screenshot from step step-008",
+              "timestamp": "2026-01-29T01:00:52.453Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-009-click-checkout-button-1769648452550.png",
+              "description": "Screenshot from step step-009",
+              "timestamp": "2026-01-29T01:00:52.499Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-010-enter-first-name-1769648452636.png",
+              "description": "Screenshot from step step-010",
+              "timestamp": "2026-01-29T01:00:52.623Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-011-enter-last-name-1769648452717.png",
+              "description": "Screenshot from step step-011",
+              "timestamp": "2026-01-29T01:00:52.704Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-012-enter-postal-code-1769648452799.png",
+              "description": "Screenshot from step step-012",
+              "timestamp": "2026-01-29T01:00:52.785Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-013-click-continue-button-1769648452952.png",
+              "description": "Screenshot from step step-013",
+              "timestamp": "2026-01-29T01:00:52.854Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-014-click-finish-button-1769648453075.png",
+              "description": "Screenshot from step step-014",
+              "timestamp": "2026-01-29T01:00:53.025Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-015-verify-if-order-is-placed-1769648453145.png",
+              "description": "Screenshot from step step-015",
+              "timestamp": "2026-01-29T01:00:53.131Z"
+            }
+          ],
+          "steps": [
+            {
+              "id": "step-001",
+              "action": "navigate",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:50.516Z",
+                "endTime": "2026-01-29T01:00:51.093Z",
+                "duration": "0.6s",
+                "durationMs": 577
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-002",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:51.238Z",
+                "endTime": "2026-01-29T01:00:51.271Z",
+                "duration": "0.0s",
+                "durationMs": 33
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-003",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:51.336Z",
+                "endTime": "2026-01-29T01:00:51.355Z",
+                "duration": "0.0s",
+                "durationMs": 19
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-004",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:51.425Z",
+                "endTime": "2026-01-29T01:00:51.609Z",
+                "duration": "0.2s",
+                "durationMs": 184
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-005",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:51.772Z",
+                "endTime": "2026-01-29T01:00:51.799Z",
+                "duration": "0.0s",
+                "durationMs": 27
+              },
+              "assertions": [
+                {
+                  "type": "url",
+                  "target": "",
+                  "expected": "/inventory.html",
+                  "actual": "https://www.saucedemo.com/inventory.html",
+                  "description": "url OK: contains \"/inventory.html\"",
+                  "status": "passed"
+                },
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Swag Labs",
+                  "actual": "Swag Labs",
+                  "description": "text OK: .app_logo contains \"Swag Labs\"",
+                  "status": "passed"
+                }
+              ]
+            },
+            {
+              "id": "step-006",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.117Z",
+                "endTime": "2026-01-29T01:00:52.184Z",
+                "duration": "0.1s",
+                "durationMs": 67
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-007",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.349Z",
+                "endTime": "2026-01-29T01:00:52.407Z",
+                "duration": "0.1s",
+                "durationMs": 58
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-008",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.453Z",
+                "endTime": "2026-01-29T01:00:52.461Z",
+                "duration": "0.0s",
+                "durationMs": 8
+              },
+              "assertions": [
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Your Cart",
+                  "actual": "Your Cart",
+                  "description": "text OK: [data-test='title'] contains \"Your Cart\"",
+                  "status": "passed"
+                }
+              ]
+            },
+            {
+              "id": "step-009",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.499Z",
+                "endTime": "2026-01-29T01:00:52.550Z",
+                "duration": "0.1s",
+                "durationMs": 51
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-010",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.623Z",
+                "endTime": "2026-01-29T01:00:52.636Z",
+                "duration": "0.0s",
+                "durationMs": 13
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-011",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.704Z",
+                "endTime": "2026-01-29T01:00:52.717Z",
+                "duration": "0.0s",
+                "durationMs": 13
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-012",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.785Z",
+                "endTime": "2026-01-29T01:00:52.799Z",
+                "duration": "0.0s",
+                "durationMs": 14
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-013",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:52.854Z",
+                "endTime": "2026-01-29T01:00:52.951Z",
+                "duration": "0.1s",
+                "durationMs": 97
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-014",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:53.025Z",
+                "endTime": "2026-01-29T01:00:53.074Z",
+                "duration": "0.0s",
+                "durationMs": 49
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-015",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:53.131Z",
+                "endTime": "2026-01-29T01:00:53.138Z",
+                "duration": "0.0s",
+                "durationMs": 7
+              },
+              "assertions": [
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Thank you for your order!",
+                  "actual": "Thank you for your order!",
+                  "description": "text OK: [data-test='complete-header'] contains \"Thank you for your order!\"",
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenarioId": "login-test-001",
+      "scenarioName": "Login Test Scenario",
+      "baseUrl": "https://www.saucedemo.com",
+      "status": "passed",
+      "execution": {
+        "startTime": "2026-01-29T01:00:53.303Z",
+        "endTime": "2026-01-29T01:00:54.948Z",
+        "duration": "1.6s",
+        "durationMs": 1645
+      },
+      "summary": {
+        "totalTests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        {
+          "id": "tc-001",
+          "name": "Navigate to Homepage",
+          "description": "",
+          "status": "passed",
+          "priority": "medium",
+          "tags": [],
+          "execution": {
+            "startTime": "2026-01-29T01:00:53.454Z",
+            "endTime": "2026-01-29T01:00:53.971Z",
+            "duration": "0.5s",
+            "durationMs": 517
+          },
+          "evidence": [
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-001-navigate-to-login-page-1769648453850.png",
+              "description": "Screenshot from step step-001",
+              "timestamp": "2026-01-29T01:00:53.454Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-002-verify-page-title-1769648453927.png",
+              "description": "Screenshot from step step-002",
+              "timestamp": "2026-01-29T01:00:53.918Z"
+            }
+          ],
+          "steps": [
+            {
+              "id": "step-001",
+              "action": "navigate",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:53.454Z",
+                "endTime": "2026-01-29T01:00:53.850Z",
+                "duration": "0.4s",
+                "durationMs": 396
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-002",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:53.918Z",
+                "endTime": "2026-01-29T01:00:53.926Z",
+                "duration": "0.0s",
+                "durationMs": 8
+              },
+              "assertions": [
+                {
+                  "type": "visible",
+                  "target": "",
+                  "expected": "true",
+                  "actual": "true",
+                  "description": "visible OK: body",
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tc-002",
+          "name": "execute login",
+          "description": "",
+          "status": "passed",
+          "priority": "medium",
+          "tags": [],
+          "execution": {
+            "startTime": "2026-01-29T01:00:53.972Z",
+            "endTime": "2026-01-29T01:00:54.832Z",
+            "duration": "0.9s",
+            "durationMs": 860
+          },
+          "evidence": [
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-001-enter-username-1769648454035.png",
+              "description": "Screenshot from step step-001",
+              "timestamp": "2026-01-29T01:00:53.972Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-002-enter-password-1769648454120.png",
+              "description": "Screenshot from step step-002",
+              "timestamp": "2026-01-29T01:00:54.096Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-003-click-login-button-1769648454354.png",
+              "description": "Screenshot from step step-003",
+              "timestamp": "2026-01-29T01:00:54.221Z"
+            },
+            {
+              "type": "screenshot",
+              "url": "./test-evidence/step-004-verify-home-page-is-loaded-1769648454601.png",
+              "description": "Screenshot from step step-004",
+              "timestamp": "2026-01-29T01:00:54.572Z"
+            }
+          ],
+          "steps": [
+            {
+              "id": "step-001",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:53.972Z",
+                "endTime": "2026-01-29T01:00:54.035Z",
+                "duration": "0.1s",
+                "durationMs": 63
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-002",
+              "action": "type",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:54.096Z",
+                "endTime": "2026-01-29T01:00:54.119Z",
+                "duration": "0.0s",
+                "durationMs": 23
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-003",
+              "action": "click",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:54.221Z",
+                "endTime": "2026-01-29T01:00:54.353Z",
+                "duration": "0.1s",
+                "durationMs": 132
+              },
+              "assertions": []
+            },
+            {
+              "id": "step-004",
+              "action": "assert",
+              "description": "",
+              "status": "passed",
+              "execution": {
+                "startTime": "2026-01-29T01:00:54.572Z",
+                "endTime": "2026-01-29T01:00:54.601Z",
+                "duration": "0.0s",
+                "durationMs": 29
+              },
+              "assertions": [
+                {
+                  "type": "url",
+                  "target": "",
+                  "expected": "/inventory.html",
+                  "actual": "https://www.saucedemo.com/inventory.html",
+                  "description": "url OK: contains \"/inventory.html\"",
+                  "status": "passed"
+                },
+                {
+                  "type": "text",
+                  "target": "",
+                  "expected": "Swag Labs",
+                  "actual": "Swag Labs",
+                  "description": "text OK: div.app_logo contains \"Swag Labs\"",
+                  "status": "passed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
