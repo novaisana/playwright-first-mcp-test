@@ -4,6 +4,19 @@ An intelligent, AI-ready browser test automation framework that bridges **Playwr
 
 ---
 
+## Project Objective
+
+Execute and manage E2E tests using **declarative JSON scenarios** and **MCP protocol integration**. This enables:
+- ✅ Code-free test definition (JSON-based scenarios)
+- ✅ AI-orchestrated test execution (Claude can call test tools)
+- ✅ Comprehensive reporting (JSON + screenshots)
+- ✅ Multi-browser testing (Chromium, Firefox, WebKit)
+- ✅ Use MCP to menage test context and configurations
+
+---
+
+---
+
 ## Technologies Used
 
 - **Playwright** (v1.57.0) — Multi-browser automation (Chromium, Firefox, WebKit)
@@ -12,7 +25,41 @@ An intelligent, AI-ready browser test automation framework that bridges **Playwr
 - **Winston** (v3.19.0) — Structured logging across all components
 - **Node.js** (v18+) — Runtime environment
 
+
 ---
+
+## MCP Integration (AI-Ready)
+
+The MCP server exposes test execution as **discoverable tools** for AI models:
+
+### Available Tools
+
+**1. execute_scenario**
+```
+Tool: execute_scenario
+Input: { scenarioPath: string, options?: ExecutionOptions }
+Output: ScenarioResult with pass/fail status, duration, test details
+```
+
+**2. list_scenarios**
+```
+Tool: list_scenarios
+Input: { directory?: string }
+Output: Array of available scenario files
+```
+
+**3. validate_scenario**
+```
+Tool: validate_scenario
+Input: { scenarioPath: string }
+Output: Validation result (passes/fails JSON schema check)
+```
+
+**4. get_health**
+```
+Tool: get_health
+Output: Server health status
+```
 
 ### How AI Uses These Tools
 
@@ -30,84 +77,6 @@ Example Claude prompt:
 → Returns report with screenshots and assertions
 → Claude shows you the results
 ```
-
-## Project Objective
-
-Execute and manage E2E tests using **declarative JSON scenarios** and **MCP protocol integration**. This enables:
-- ✅ Code-free test definition (JSON-based scenarios)
-- ✅ AI-orchestrated test execution (Claude can call test tools)
-- ✅ Self-healing selectors (automatic recovery from UI changes)
-- ✅ Comprehensive reporting (JSON + screenshots)
-- ✅ Multi-browser testing (Chromium, Firefox, WebKit)
-
----
-
-## Architecture & Overall Flow
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  MCP Client (Claude, IDE, external tool)                │
-└────────────────────┬────────────────────────────────────┘
-                     │ MCP Protocol (StdIO)
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│  MCPTestServer                                          │
-│  • Exposes test tools (execute_scenario, list_scenarios)│
-│  • Routes tool calls to appropriate handlers            │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-      ┌──────────────────────────────┐
-      │  ScenarioExecutor            │
-      │  • Loads JSON scenario files │
-      │  • Executes test cases/steps │
-      │  • Manages test lifecycle    │
-      └──────────┬───────────────────┘
-                 │
-                 ▼
-      ┌──────────────────────────────┐
-      │  BrowserManager              │
-      │  • Session lifecycle         │
-      │  • Context/Page management   │
-      │  • Resource cleanup          │
-      └──────────┬───────────────────┘
-                 │
-          ┌──────┴──────┬──────────┐
-          ▼             ▼          ▼
-       navigate()  click()  type() wait() assert()
-            │                        │
-            └────────┬───────────────┘
-                     ▼
-      ┌──────────────────────────────┐
-      │  PageActions                 │
-      │  • Browser interactions      │
-      │  • Assertion validation      │
-      │  • Screenshot capture        │
-      └──────────┬───────────────────┘
-                 │
-      ┌──────────┴───────────┐
-      │  LocatorHealer       │
-      │  • Self-heal selectors
-      │  • Fuzzy selector matching
-      └──────────┬───────────┘
-                 │
-                 ▼
-      ┌──────────────────────────────┐
-      │  Playwright                  │
-      │  • Real browser automation   │
-      │  • Screenshot capture        │
-      └──────────┬───────────────────┘
-                 │
-                 ▼
-      ┌──────────────────────────────┐
-      │  ReportGenerator             │
-      │  • Transform results to JSON │
-      │  • Link evidence paths       │
-      │  • Persist reports           │
-      └──────────────────────────────┘
-```
-
----
 
 ## Page Objects Pattern
 
@@ -336,39 +305,6 @@ Full TypeScript interfaces: [src/types/index.ts](src/types/index.ts)
 
 ---
 
-## MCP Integration (AI-Ready)
-
-The MCP server exposes test execution as **discoverable tools** for AI models:
-
-### Available Tools
-
-**1. execute_scenario**
-```
-Tool: execute_scenario
-Input: { scenarioPath: string, options?: ExecutionOptions }
-Output: ScenarioResult with pass/fail status, duration, test details
-```
-
-**2. list_scenarios**
-```
-Tool: list_scenarios
-Input: { directory?: string }
-Output: Array of available scenario files
-```
-
-**3. validate_scenario**
-```
-Tool: validate_scenario
-Input: { scenarioPath: string }
-Output: Validation result (passes/fails JSON schema check)
-```
-
-**4. get_health**
-```
-Tool: get_health
-Output: Server health status
-```
-
 ---
 
 ## Test Results & Reports
@@ -441,6 +377,71 @@ npx playwright install
 ```bash
 npm run build  # Rebuild TypeScript first
 npm run dev
+```
+
+## Architecture & Overall Flow
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  MCP Client (Claude, IDE, external tool)                │
+└────────────────────┬────────────────────────────────────┘
+                     │ MCP Protocol (StdIO)
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│  MCPTestServer                                          │
+│  • Exposes test tools (execute_scenario, list_scenarios)│
+│  • Routes tool calls to appropriate handlers            │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+      ┌──────────────────────────────┐
+      │  ScenarioExecutor            │
+      │  • Loads JSON scenario files │
+      │  • Executes test cases/steps │
+      │  • Manages test lifecycle    │
+      └──────────┬───────────────────┘
+                 │
+                 ▼
+      ┌──────────────────────────────┐
+      │  BrowserManager              │
+      │  • Session lifecycle         │
+      │  • Context/Page management   │
+      │  • Resource cleanup          │
+      └──────────┬───────────────────┘
+                 │
+          ┌──────┴──────┬──────────┐
+          ▼             ▼          ▼
+       navigate()  click()  type() wait() assert()
+            │                        │
+            └────────┬───────────────┘
+                     ▼
+      ┌──────────────────────────────┐
+      │  PageActions                 │
+      │  • Browser interactions      │
+      │  • Assertion validation      │
+      │  • Screenshot capture        │
+      └──────────┬───────────────────┘
+                 │
+      ┌──────────┴───────────┐
+      │  LocatorHealer       │
+      │  • Self-heal selectors
+      │  • Fuzzy selector matching
+      └──────────┬───────────┘
+                 │
+                 ▼
+      ┌──────────────────────────────┐
+      │  Playwright                  │
+      │  • Real browser automation   │
+      │  • Screenshot capture        │
+      └──────────┬───────────────────┘
+                 │
+                 ▼
+      ┌──────────────────────────────┐
+      │  ReportGenerator             │
+      │  • Transform results to JSON │
+      │  • Link evidence paths       │
+      │  • Persist reports           │
+      └──────────────────────────────┘
 ```
 
 ---
