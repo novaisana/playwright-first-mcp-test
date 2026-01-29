@@ -14,6 +14,23 @@ An intelligent, AI-ready browser test automation framework that bridges **Playwr
 
 ---
 
+### How AI Uses These Tools
+
+When you run MCP server (`npm run dev`), AI clients (like Claude) can:
+1. **List scenarios** → `"Show me all available tests"`
+2. **Execute tests** → `"Run the login test scenario"`
+3. **Validate** → `"Check if my scenario JSON is valid"`
+4. **Get results** → Receive structured execution results with screenshots
+
+Example Claude prompt:
+```
+"Execute the login test scenario and show me the results"
+→ Claude calls execute_scenario tool
+→ MCP server runs test
+→ Returns report with screenshots and assertions
+→ Claude shows you the results
+```
+
 ## Project Objective
 
 Execute and manage E2E tests using **declarative JSON scenarios** and **MCP protocol integration**. This enables:
@@ -112,12 +129,6 @@ await pageActions.assert(page, [{ type: 'visible', target: 'h1', expected: 'true
 - UI changes only require updating PageActions
 - Consistent, reusable interaction methods
 - Easy to extend with new actions
-
-### **LocatorHealer (src/browser/locator-healer.ts)**
-Auto-recovers broken CSS selectors when UI changes:
-- Generates selector candidates (typo fixes, tag variants)
-- Fuzzy-matches IDs on the page
-- Automatically heals failing tests without code changes
 
 ---
 
@@ -358,23 +369,6 @@ Tool: get_health
 Output: Server health status
 ```
 
-### How AI Uses These Tools
-
-When you run MCP server (`npm run dev`), AI clients (like Claude) can:
-1. **List scenarios** → `"Show me all available tests"`
-2. **Execute tests** → `"Run the login test scenario"`
-3. **Validate** → `"Check if my scenario JSON is valid"`
-4. **Get results** → Receive structured execution results with screenshots
-
-Example Claude prompt:
-```
-"Execute the login test scenario and show me the results"
-→ Claude calls execute_scenario tool
-→ MCP server runs test
-→ Returns report with screenshots and assertions
-→ Claude shows you the results
-```
-
 ---
 
 ## Test Results & Reports
@@ -442,10 +436,6 @@ npx playwright install
 - Check network connectivity to test site
 - Use `npm run test:headed` to watch execution
 
-**Q: Selectors not found**
-- LocatorHealer will auto-try alternative selectors
-- Check test results screenshots for visual confirmation
-- Validate selector with browser DevTools
 
 **Q: MCP Server won't start**
 ```bash
